@@ -1,0 +1,25 @@
+@import './variables';
+
+.FrontPage{
+    background: #F3F0D7;
+    min-height: 100vh;
+    padding-top: 2rem;
+    .repos_container{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 10rem);
+        justify-content: center;
+        gap: 3rem;
+    }
+
+    &_input, &_input:focus{
+        margin: 0 auto 2rem;
+        width: 15rem;
+        display: block;
+        outline: none;
+        background: #091353;
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: .5rem 1rem;
+    }
+}
