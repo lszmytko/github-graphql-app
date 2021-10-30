@@ -123,16 +123,16 @@ button {
   background: $clr-main;
 }
 
-input,
-input:focus {
-  border-radius: $radius;
-  padding: 0.25rem;
-}
-input:focus {
-  border: 2px solid $clr-main;
-  outline: none;
-  border-radius: $radius;
-}
+// input,
+// input:focus {
+//   border-radius: $radius;
+//   padding: 0.25rem;
+// }
+// input:focus {
+//   border: 2px solid $clr-main;
+//   outline: none;
+//   border-radius: $radius;
+// }
 
 @media screen and (min-width: 768px) {
   h1 {

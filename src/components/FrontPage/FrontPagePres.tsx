@@ -24,15 +24,17 @@ const FrontPagePres = ({
 }: Iprops) => {
   return (
     <div className="FrontPage">
-      <input
-        type="text"
-        value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value);
-        }}
-        className="FrontPage_input"
-        placeholder="Wpisz repozytorium"
-      />
+      <div className="input-container">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
+          className="FrontPage_input"
+          placeholder="Wpisz repozytorium"
+        />
+      </div>
       <div className="repos_container">
         {repositories &&
           repositories.map((repo, index) => {

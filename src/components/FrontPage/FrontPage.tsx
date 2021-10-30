@@ -72,6 +72,10 @@ const FrontPage = () => {
           after: null,
         },
       });
+    } else if(inputValue.length <3){
+      setRepositories([]);
+      SetCursor("");
+      setHasMore(false);
     }
   }, [inputValue]);
 
@@ -83,10 +87,6 @@ const FrontPage = () => {
       });
       SetCursor(data.search.pageInfo.endCursor);
       setHasMore(data.search.pageInfo.hasNextPage);
-    } else if (inputValue.length < 3) {
-      setRepositories([]);
-      SetCursor("");
-      setHasMore(false);
     }
   }, [data]);
 
