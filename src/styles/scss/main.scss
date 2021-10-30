@@ -13,6 +13,7 @@
 body {
   font-family: $ff-primary;
   background: white;
+  overflow-x: hidden;
   color: $clr-main;
   line-height: 1.5;
   font-size: 0.875rem;
@@ -122,17 +123,6 @@ button {
   color: $clr-main;
   background: $clr-main;
 }
-
-// input,
-// input:focus {
-//   border-radius: $radius;
-//   padding: 0.25rem;
-// }
-// input:focus {
-//   border: 2px solid $clr-main;
-//   outline: none;
-//   border-radius: $radius;
-// }
 
 @media screen and (min-width: 768px) {
   h1 {

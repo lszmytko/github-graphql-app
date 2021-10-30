@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import {gql, useLazyQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import FrontPagePres from "./FrontPagePres";
 import moment from "moment";
 import "moment/locale/pl";
 
-
-// SETTING LOCALE TO PL 
+// SETTING LOCALE TO PL
 moment.locale("pl");
-
 
 const GET_TEST_DATA = gql`
   query getData($input: String!, $reposPerFetch: Int!, $after: String) {
@@ -72,7 +70,7 @@ const FrontPage = () => {
           after: null,
         },
       });
-    } else if(inputValue.length <3){
+    } else if (inputValue.length < 3) {
       setRepositories([]);
       SetCursor("");
       setHasMore(false);
@@ -123,7 +121,6 @@ const FrontPage = () => {
   );
 
   return (
-    <>
     <FrontPagePres
       repositories={repositories}
       inputValue={inputValue}
@@ -131,8 +128,6 @@ const FrontPage = () => {
       fetchMoreData={fetchMoreData}
       lastRepoRef={lastRepoRef}
     />
-    {loading && <p>Loading...</p>}
-    </>
   );
 };
 
