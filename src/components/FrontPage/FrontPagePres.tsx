@@ -1,35 +1,34 @@
 import React from "react";
 import Repo from "../Repo";
 
-interface Iprops {
-  repositories: Array<{
+const FrontPagePres: React.FC<{
+  repositories: {
     node: {
       name: string;
       createdAt: string;
       owner: { login: string; avatarUrl: string };
     };
-  }>;
+  }[];
   inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
   fetchMoreData: () => void;
   lastRepoRef: (node: any) => void;
-}
-
-const FrontPagePres = ({
-  repositories,
-  inputValue,
-  setInputValue,
-  fetchMoreData,
-  lastRepoRef,
-}: Iprops) => {
+}> = (props) => {
+  const {
+    repositories,
+    inputValue,
+    setInputValue,
+    fetchMoreData,
+    lastRepoRef,
+  } = props;
   return (
     <div className="FrontPage">
       <div className="input-container">
         <input
           type="text"
-          value={inputValue}
+          value={props.inputValue}
           onChange={(e) => {
-            setInputValue(e.target.value);
+            props.setInputValue(e.target.value);
           }}
           className="FrontPage_input"
           placeholder="Wpisz repozytorium"

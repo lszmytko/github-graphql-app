@@ -3,57 +3,29 @@ import { gql, useLazyQuery } from "@apollo/client";
 import FrontPagePres from "./FrontPagePres";
 import moment from "moment";
 import "moment/locale/pl";
+import GET_TEST_DATA from "../../graphql/queries";
 
 // SETTING LOCALE TO PL
 moment.locale("pl");
 
-const GET_TEST_DATA = gql`
-  query getData($input: String!, $reposPerFetch: Int!, $after: String) {
-    search(
-      query: $input
-      type: REPOSITORY
-      first: $reposPerFetch
-      after: $after
-    ) {
-      repositoryCount
-      pageInfo {
-        endCursor
-        startCursor
-        hasNextPage
-      }
-      edges {
-        node {
-          ... on Repository {
-            name
-            createdAt
-            owner {
-              login
-              avatarUrl
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
 const FrontPage = () => {
   const [repositories, setRepositories] = useState<
-    Array<{
+    {
       node: {
         name: string;
         createdAt: string;
         owner: { login: string; avatarUrl: string };
       };
-    }>
+    }[]
   >([]);
+
   const [inputValue, setInputValue] = useState("");
   const [hasMore, setHasMore] = useState(false);
   const [cursor, SetCursor] = useState("");
   const [getRepositories, { loading, data, fetchMore }] = useLazyQuery(
     GET_TEST_DATA,
     { fetchPolicy: "network-only" }
-  );
+  ); 
 
   // FETCHING DATA AFTER 3 LETTERS
   useEffect(() => {
@@ -63,13 +35,7 @@ const FrontPage = () => {
       setRepositories((prevRepos) => {
         return [];
       });
-      getRepositories({
-        variables: {
-          input: inputValue,
-          reposPerFetch: 20,
-          after: null,
-        },
-      });
+      fetchMoreData(null)
     } else if (inputValue.length < 3) {
       setRepositories([]);
       SetCursor("");
@@ -90,12 +56,12 @@ const FrontPage = () => {
 
   // INFFINITE SCROLL FETCHING DATA
 
-  const fetchMoreData = () => {
+  const fetchMoreData = (afterItem: string | null) => {
     getRepositories({
       variables: {
         input: inputValue,
         reposPerFetch: 20,
-        after: cursor,
+        after: afterItem,
       },
     });
   };
@@ -109,7 +75,7 @@ const FrontPage = () => {
       observer.current = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting && hasMore) {
-            fetchMoreData();
+            fetchMoreData(cursor);
           }
         },
         { rootMargin: "50px" }
@@ -125,7 +91,7 @@ const FrontPage = () => {
       repositories={repositories}
       inputValue={inputValue}
       setInputValue={setInputValue}
-      fetchMoreData={fetchMoreData}
+      fetchMoreData={()=>fetchMoreData(cursor)}
       lastRepoRef={lastRepoRef}
     />
   );
