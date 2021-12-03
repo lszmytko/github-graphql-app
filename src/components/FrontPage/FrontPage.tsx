@@ -19,6 +19,8 @@ const FrontPage = () => {
     }[]
   >([]);
 
+  console.log('ok');
+
   const [inputValue, setInputValue] = useState("");
   const [hasMore, setHasMore] = useState(false);
   const [cursor, SetCursor] = useState("");
