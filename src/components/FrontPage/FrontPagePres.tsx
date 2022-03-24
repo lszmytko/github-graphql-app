@@ -31,7 +31,7 @@ const FrontPagePres: React.FC<{
             props.setInputValue(e.target.value);
           }}
           className="FrontPage_input"
-          placeholder="Wpisz repozytorium"
+          placeholder="Type at least three letters"
         />
       </div>
       <div className="repos_container">
