@@ -1,17 +1,8 @@
-import moment from "moment";
 import React from "react";
+import moment from "moment";
+import { repoType } from "./types";
 
-type propType = {
-  name: string;
-  createdAt: string;
-  owner: {
-    login: string;
-    avatarUrl: string;
-  };
-  reference?: (node: any) => void;
-};
-
-const Repo = (props: propType) => (
+const Repo = (props: repoType) => (
   <div className="Repo" ref={props.reference}>
     <img src={props.owner.avatarUrl} alt="avatar" />
     <p>{props.name}</p>

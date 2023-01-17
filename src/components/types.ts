@@ -11,3 +11,13 @@ export type stateType = {
   hasMore: boolean;
   cursor: string;
 };
+
+export type repoType = {
+  name: string;
+  createdAt: string;
+  owner: {
+    login: string;
+    avatarUrl: string;
+  };
+  reference?: (node: any) => void;
+};

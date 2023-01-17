@@ -1,26 +1,20 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { gql, useLazyQuery } from "@apollo/client";
-import FrontPagePres from "./FrontPagePres";
-import moment from "moment";
-import "moment/locale/pl";
-import GET_TEST_DATA from "../../graphql/queries";
-import { stateType } from "./types";
+import { useLazyQuery } from "@apollo/client";
 
-// SETTING LOCALE TO PL
-moment.locale("pl");
+import GET_TEST_DATA from "../../graphql/queries";
+import Repo from "../Repo";
+import { stateType } from "../types";
 
 const FrontPage = () => {
   const [inputValue, setInputValue] = useState("");
-
   const [state, setState] = useState<stateType>({
     repositories: [],
     hasMore: false,
     cursor: "",
   });
-  const [getRepositories, { loading, data, fetchMore }] = useLazyQuery(
-    GET_TEST_DATA,
-    { fetchPolicy: "network-only" }
-  );
+  const [getRepositories, { loading, data }] = useLazyQuery(GET_TEST_DATA, {
+    fetchPolicy: "network-only",
+  });
 
   const { repositories, hasMore, cursor } = state;
 
@@ -53,7 +47,7 @@ const FrontPage = () => {
 
   // INFFINITE SCROLL FETCHING DATA
 
-  const observer = useRef<any>();
+  const observer = useRef<IntersectionObserver>();
   const lastRepoRef = useCallback(
     (node) => {
       if (loading) return;
@@ -74,12 +68,33 @@ const FrontPage = () => {
   );
 
   return (
-    <FrontPagePres
-      repositories={repositories}
-      inputValue={inputValue}
-      setInputValue={setInputValue}
-      lastRepoRef={lastRepoRef}
-    />
+    <div className="FrontPage">
+      <div className="input-container">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
+          className="FrontPage_input"
+          placeholder="Type at least three letters"
+        />
+      </div>
+      <div className="repos_container">
+        {repositories.length > 0 &&
+          repositories.map((repo, index) => (
+            <Repo
+              name={repo.node.name}
+              createdAt={repo.node.createdAt}
+              owner={repo.node.owner}
+              reference={
+                repositories.length === index + 1 ? lastRepoRef : undefined
+              }
+              key={index}
+            />
+          ))}
+      </div>
+    </div>
   );
 };
 
