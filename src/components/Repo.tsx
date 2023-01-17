@@ -1,7 +1,7 @@
 import moment from "moment";
 import React from "react";
 
-const Repo: React.FC<{
+type propType = {
   name: string;
   createdAt: string;
   owner: {
@@ -9,7 +9,9 @@ const Repo: React.FC<{
     avatarUrl: string;
   };
   reference?: (node: any) => void;
-}> = (props) => (
+};
+
+const Repo = (props: propType) => (
   <div className="Repo" ref={props.reference}>
     <img src={props.owner.avatarUrl} alt="avatar" />
     <p>{props.name}</p>

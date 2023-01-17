@@ -1,34 +1,22 @@
 import React from "react";
 import Repo from "../Repo";
+import { repositoryType } from "./types";
 
 const FrontPagePres: React.FC<{
-  repositories: {
-    node: {
-      name: string;
-      createdAt: string;
-      owner: { login: string; avatarUrl: string };
-    };
-  }[];
+  repositories: repositoryType[];
   inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
-  fetchMoreData: () => void;
   lastRepoRef: (node: any) => void;
 }> = (props) => {
-  const {
-    repositories,
-    inputValue,
-    setInputValue,
-    fetchMoreData,
-    lastRepoRef,
-  } = props;
+  const { repositories, inputValue, setInputValue, lastRepoRef } = props;
   return (
     <div className="FrontPage">
       <div className="input-container">
         <input
           type="text"
-          value={props.inputValue}
+          value={inputValue}
           onChange={(e) => {
-            props.setInputValue(e.target.value);
+            setInputValue(e.target.value);
           }}
           className="FrontPage_input"
           placeholder="Type at least three letters"
@@ -43,7 +31,9 @@ const FrontPagePres: React.FC<{
                   name={repo.node.name}
                   createdAt={repo.node.createdAt}
                   owner={repo.node.owner}
-                  reference={lastRepoRef}
+                  reference={
+                    repositories.length === index + 1 ? lastRepoRef : undefined
+                  }
                   key={index}
                 />
               );

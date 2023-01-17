@@ -1,6 +1,6 @@
-import { gql, useLazyQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 
-const GET_TEST_DATA = gql`
+const GET_GITHUB_DATA = gql`
   query getData($input: String!, $reposPerFetch: Int!, $after: String) {
     search(
       query: $input
@@ -30,4 +30,4 @@ const GET_TEST_DATA = gql`
   }
 `;
 
-export default GET_TEST_DATA;
+export default GET_GITHUB_DATA;

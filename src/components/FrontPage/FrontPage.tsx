@@ -4,59 +4,27 @@ import FrontPagePres from "./FrontPagePres";
 import moment from "moment";
 import "moment/locale/pl";
 import GET_TEST_DATA from "../../graphql/queries";
+import { stateType } from "./types";
 
 // SETTING LOCALE TO PL
 moment.locale("pl");
 
 const FrontPage = () => {
-  const [repositories, setRepositories] = useState<
-    {
-      node: {
-        name: string;
-        createdAt: string;
-        owner: { login: string; avatarUrl: string };
-      };
-    }[]
-  >([]);
-
   const [inputValue, setInputValue] = useState("");
-  const [hasMore, setHasMore] = useState(false);
-  const [cursor, SetCursor] = useState("");
+
+  const [state, setState] = useState<stateType>({
+    repositories: [],
+    hasMore: false,
+    cursor: "",
+  });
   const [getRepositories, { loading, data, fetchMore }] = useLazyQuery(
     GET_TEST_DATA,
     { fetchPolicy: "network-only" }
-  ); 
+  );
 
-  // FETCHING DATA AFTER 3 LETTERS
-  useEffect(() => {
-    if (inputValue.length >= 3) {
-      SetCursor("");
-      setHasMore(false);
-      setRepositories((prevRepos) => {
-        return [];
-      });
-      fetchMoreData(null)
-    } else if (inputValue.length < 3) {
-      setRepositories([]);
-      SetCursor("");
-      setHasMore(false);
-    }
-  }, [inputValue]);
+  const { repositories, hasMore, cursor } = state;
 
-  // SETTING STATES AFTER FETCHING DATA
-  useEffect(() => {
-    if (data && inputValue.length >= 3) {
-      setRepositories((prevRepos) => {
-        return [...prevRepos, ...data.search.edges];
-      });
-      SetCursor(data.search.pageInfo.endCursor);
-      setHasMore(data.search.pageInfo.hasNextPage);
-    }
-  }, [data]);
-
-  // INFFINITE SCROLL FETCHING DATA
-
-  const fetchMoreData = (afterItem: string | null) => {
+  const fetchMoreData = (afterItem?: string) => {
     getRepositories({
       variables: {
         input: inputValue,
@@ -65,6 +33,25 @@ const FrontPage = () => {
       },
     });
   };
+
+  // FETCHING DATA AFTER 3 LETTERS
+  useEffect(() => {
+    inputValue.length >= 3 && fetchMoreData();
+    setState({ repositories: [], hasMore: false, cursor: "" });
+  }, [inputValue]);
+
+  // SETTING STATES AFTER FETCHING DATA
+  useEffect(() => {
+    if (data && inputValue.length >= 3) {
+      setState((prevState) => ({
+        repositories: [...prevState.repositories, ...data.search.edges],
+        cursor: data.search.pageInfo.endCursor,
+        hasMore: data.search.pageInfo.hasNextPage,
+      }));
+    }
+  }, [data]);
+
+  // INFFINITE SCROLL FETCHING DATA
 
   const observer = useRef<any>();
   const lastRepoRef = useCallback(
@@ -91,7 +78,6 @@ const FrontPage = () => {
       repositories={repositories}
       inputValue={inputValue}
       setInputValue={setInputValue}
-      fetchMoreData={()=>fetchMoreData(cursor)}
       lastRepoRef={lastRepoRef}
     />
   );
